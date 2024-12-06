@@ -2,7 +2,7 @@ import React from "react";
 
 function NoteSearch (){
     return (
-        <div class="note-search">
+        <div className="note-search">
             <input type="text" placeholder="Cari catatan ..." value=""/>
         </div>
     )
