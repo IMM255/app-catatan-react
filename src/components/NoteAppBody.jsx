@@ -25,6 +25,8 @@ class NoteAppBody extends React.Component {
         this.setState({ notes });
     }
 
+
+
     onAddNoteHandler({title, body}) {
         this.setState((prevState) => {
             return {
