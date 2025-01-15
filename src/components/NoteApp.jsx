@@ -2,13 +2,31 @@ import React from "react";
 import NoteAppHeader from "./NoteAppHeader";
 import NoteAppBody from "./NoteAppBody";
 
-function NoteApp () {
+class NoteApp extends React.Component{
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            searchQuery: '',
+        };
+
+        this.onSearchHandler = this.onSearchHandler.bind(this);
+    }
+
+    onSearchHandler(event) {
+        this.setState({ searchQuery: event.target.value });
+    }
+    render() {
     return (
-        <div>
-            <NoteAppHeader />
-            <NoteAppBody />
-        </div>
+        <>
+            <NoteAppHeader 
+                searchQuery={ this.state.searchQuery }
+                onSearch={ this.onSearchHandler }
+            />
+            <NoteAppBody searchQuery={ this.state.searchQuery } />
+        </>
     )
+}
 }
 
 export default NoteApp;

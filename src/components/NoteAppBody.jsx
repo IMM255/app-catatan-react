@@ -1,76 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
 import { getInitialData } from "../utils";
+import PropTypes from "prop-types";
 import NoteList from "./NoteList";
 import NoteInput from "./NoteInput";
 
-class NoteAppBody extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            notes: getInitialData(),
-        }
+function NoteAppBody({ searchQuery }) {
+    // Use state for notes
+    const [notes, setNotes] = useState(getInitialData());
 
-        this.onDeleteHandler = this.onDeleteHandler.bind(this);
-        this.onAddNoteHandler = this.onAddNoteHandler.bind(this);
-        this.onArchiveHandler = this.onArchiveHandler.bind(this);
-      
-    }
-    onDeleteHandler(id){
-        const notes = this.state.notes.filter(note => note.id !== id);
-        this.setState({ notes });
-    }
+    // Handler functions
+    const onDeleteHandler = (id) => {
+        setNotes(notes.filter(note => note.id !== id));
+    };
 
-    onArchiveHandler(id){
-        const notes = this.state.notes.map(note => note.id === id ? {...note, archived : !note.archived} : note);
-        this.setState({ notes });
-    }
+    const onArchiveHandler = (id) => {
+        setNotes(notes.map(note => note.id === id ? { ...note, archived: !note.archived } : note));
+    };
 
-
-
-    onAddNoteHandler({title, body}) {
-        this.setState((prevState) => {
-            return {
-                notes: [
-                    ...prevState.notes,
-                    {
-                        id: +new Date(),
-                        title,
-                        body,
-                        createdAt: +new Date(),
-                        archived: false
-                    }
-                ]
+    const onAddNoteHandler = ({ title, body }) => {
+        setNotes(prevNotes => [
+            ...prevNotes,
+            {
+                id: +new Date(),
+                title,
+                body,
+                createdAt: new Date().toISOString(),
+                archived: false
             }
-        })
-    }
+        ]);
+    };
 
-    render(){
-        const activeNotes = this.state.notes.filter((note) => {
-            return note.archived === false;
-        });
-        
-        const archivedNotes = this.state.notes.filter((note) => {
-            return note.archived === true;
-        });
+    // Filter notes based on the search query
+    const activeNotes = notes.filter(note => !note.archived);
+    const archivedNotes = notes.filter(note => note.archived);
+
+    const filteredActiveNotes = activeNotes.filter(note => 
+        note.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filteredArchiveNotes = archivedNotes.filter(note => 
+        note.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="note-app__body">
-            <NoteInput addNote={this.onAddNoteHandler} />
+            <NoteInput addNote={onAddNoteHandler} />
             <h2>Catatan Aktif</h2>
             <NoteList 
-                notes={activeNotes} 
-                onDelete={this.onDeleteHandler} 
-                onArchive={this.onArchiveHandler}
-                />
+                notes={filteredActiveNotes} 
+                onDelete={onDeleteHandler} 
+                onArchive={onArchiveHandler}
+            />
             <h2>Arsip</h2>
             <NoteList 
-                notes={archivedNotes}
-                onDelete={this.onDeleteHandler}
-                onArchive={this.onArchiveHandler}
+                notes={filteredArchiveNotes}
+                onDelete={onDeleteHandler}
+                onArchive={onArchiveHandler}
             />
         </div>
-    )
-    }
+    );
+}
 
+NoteAppBody.propTypes = {
+    searchQuery: PropTypes.string.isRequired,
 }
 
 export default NoteAppBody;

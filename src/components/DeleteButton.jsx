@@ -1,8 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-function DeleteButton ({id, onDelete}) {
-    console.log("Props di Delete:", {id, onDelete}); 
-    return <button className="note-item__delete-button" onClick={() => onDelete(id)}>Delete</button>
+function DeleteButton({ id, onDelete }) {
+  return (
+    <button className="note-item__delete-button" onClick={() => onDelete(id)}>
+      Delete
+    </button>
+  );
 }
+
+DeleteButton.propTypes = {
+  id: PropTypes.number.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
 
 export default DeleteButton;
