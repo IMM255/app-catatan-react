@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navigation from "./Navigation";
 import HomePage from "../pages/HomePage";
 import AddPage from "../pages/AddPage";
@@ -6,10 +6,30 @@ import ArchivedPage from "../pages/ArchivedPage";
 import DetailPage from "../pages/DetailPage";
 import { Route, Routes, Link } from "react-router-dom";
 import RegisterPage from "../pages/RegisterPage";
+import LoginPage from "../pages/LoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
+import { getUserLogged, putAccessToken } from "../utils/api";
 
 function NoteApp() {
   const [authUser, setAuthedUser] = useState(null);
+  const [initializing, setInitializing] = useState(true);
+  async function onLoginSuccess({ accessToken }) {
+    putAccessToken(accessToken);
+    const { data } = await getUserLogged();
+    setAuthedUser(data);
+  }
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await getUserLogged();
+      setAuthedUser(data);
+      setInitializing(false);
+    };
+    getUser();
+  }, []);
+  if (initializing) {
+    return null;
+  }
 
   if (authUser === null) {
     return (
@@ -22,7 +42,10 @@ function NoteApp() {
         </header>
         <main>
           <Routes>
-            <Route path="/*" element={<p>Halaman Login</p>} />
+            <Route
+              path="/*"
+              element={<LoginPage loginSuccess={onLoginSuccess} />}
+            />
             <Route path="/register" element={<RegisterPage />}></Route>
           </Routes>
         </main>
