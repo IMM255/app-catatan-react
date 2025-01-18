@@ -1,79 +1,65 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { MdDone } from "react-icons/md";
+import { useState } from "react";
 
-class NoteInput extends React.Component {
-  constructor(props) {
-    super(props);
+function NoteInput({ onSubmit }) {
+  const [title, setTitle] = React.useState("");
+  const [body, setBody] = React.useState("");
+  const [titleCharLimit, setTitleCharLimit] = useState(50);
 
-    this.state = {
-      title: "",
-      body: "",
-      titleCharLimit: 50,
-    };
-
-    this.onTitleChangeEventHandler = this.onTitleChangeEventHandler.bind(this);
-    this.onBodyChangeEventHandler = this.onBodyChangeEventHandler.bind(this);
-    this.onSubmitEventHandler = this.onSubmitEventHandler.bind(this);
-  }
-
-  onTitleChangeEventHandler(event) {
-    const maxLimit = this.state.titleCharLimit;
+  const onTitleChangeEventHandler = (event) => {
+    const maxLimit = titleCharLimit;
     const inputValue = event.target.value;
     if (inputValue.length <= maxLimit) {
-      this.setState(() => {
-        return {
-          title: inputValue,
-        };
-      });
+      setTitle(inputValue);
     }
-  }
+  };
 
-  onBodyChangeEventHandler(event) {
-    this.setState(() => {
-      return {
-        body: event.target.value,
-      };
-    });
-  }
+  const onBodyChangeEventHandler = (event) => {
+    setBody(event.target.value);
+  };
 
-  onSubmitEventHandler(event) {
-    event.preventDefault();
-    this.props.addNote(this.state);
-  }
-
-  render() {
-    return (
-      <div className="note-input">
-        <h2>Buat Catatan</h2>
-        <form onSubmit={this.onSubmitEventHandler}>
+  return (
+    <div className="add-new--page__input">
+      <div className="add-new-page__input">
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            onSubmit({ title, body });
+          }}
+        >
           <p className="note-input__title__char-limit">
-            Sisa karakter: {this.state.titleCharLimit - this.state.title.length}
+            Sisa karakter: {titleCharLimit - title.length}
           </p>
           <input
-            className="note-input__title"
+            className="add-new-page__input__title"
             type="text"
             placeholder="Ini adalah judul ..."
             required=""
-            value={this.state.title}
-            onChange={this.onTitleChangeEventHandler}
+            value={title}
+            onChange={onTitleChangeEventHandler}
           />
           <textarea
-            className="note-input__body"
+            className="add-new-page__input__body"
             type="text"
             placeholder="Tuliskan catatanmu di sini ..."
             required=""
-            value={this.state.body}
-            onChange={this.onBodyChangeEventHandler}
+            value={body}
+            onChange={onBodyChangeEventHandler}
           ></textarea>
-          <button type="submit">Buat</button>
+          <div className="add-new-page__action">
+            <button type="submit" className="action">
+              <MdDone />
+            </button>
+          </div>
         </form>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 NoteInput.propTypes = {
-  addNote: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
-
 export default NoteInput;

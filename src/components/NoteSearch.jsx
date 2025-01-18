@@ -1,22 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-function NoteSearch({ searchQuery, onSearch }) {
+function NoteSearch({ keyword, keywordChange }) {
   return (
-    <div className="note-search">
+    <section className="search-bar">
       <input
         type="text"
         placeholder="Cari catatan ..."
-        value={searchQuery}
-        onChange={onSearch}
+        value={keyword}
+        onChange={(e) => keywordChange(e.target.value)}
       />
-    </div>
+    </section>
   );
 }
 
 NoteSearch.propTypes = {
-  searchQuery: PropTypes.string.isRequired,
-  onSearch: PropTypes.func.isRequired,
+  keyword: PropTypes.string.isRequired,
+  keywordChange: PropTypes.func.isRequired,
 };
-
 export default NoteSearch;

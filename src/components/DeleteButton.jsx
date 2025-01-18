@@ -1,16 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { FaTrashCan } from "react-icons/fa6";
 
 function DeleteButton({ id, onDelete }) {
   return (
-    <button className="note-item__delete-button" onClick={() => onDelete(id)}>
-      Delete
+    <button className="action" onClick={() => onDelete(id)}>
+      <FaTrashCan />
     </button>
   );
 }
 
 DeleteButton.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
 };
 

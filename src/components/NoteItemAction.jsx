@@ -7,7 +7,7 @@ function NoteItemAction({ id, onDelete, onArchive, archived }) {
   console.log("Props di Action:", { onDelete, onArchive });
 
   return (
-    <div className="note-item__action">
+    <div className="detail-page__action">
       <DeleteButton id={id} onDelete={onDelete} />
       <ArchiveButton id={id} onArchive={onArchive} archived={archived} />
     </div>
@@ -15,7 +15,7 @@ function NoteItemAction({ id, onDelete, onArchive, archived }) {
 }
 
 NoteItemAction.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
   onArchive: PropTypes.func.isRequired,
   archived: PropTypes.bool,
