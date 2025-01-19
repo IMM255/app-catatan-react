@@ -11,7 +11,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 import { getUserLogged, putAccessToken } from "../utils/api";
 
 function NoteApp() {
-  const [authUser, setAuthedUser] = useState(null);
+  const [authedUser, setAuthedUser] = useState(null);
   const [initializing, setInitializing] = useState(true);
   async function onLoginSuccess({ accessToken }) {
     putAccessToken(accessToken);
@@ -27,18 +27,24 @@ function NoteApp() {
     };
     getUser();
   }, []);
+
+  const onLogout = () => {
+    setAuthedUser(null);
+    putAccessToken("");
+  };
+
   if (initializing) {
     return null;
   }
 
-  if (authUser === null) {
+  if (authedUser === null) {
     return (
       <div className="app-container">
         <header>
           <h1>
             <Link to="/">Aplikasi Catatan</Link>
           </h1>
-          <Navigation />
+          <Navigation logout={null} name={null} />
         </header>
         <main>
           <Routes>
@@ -58,11 +64,11 @@ function NoteApp() {
         <h1>
           <Link to="/">Aplikasi Catatan</Link>
         </h1>
-        <Navigation />
+        <Navigation logout={onLogout} name={authedUser.name} />
       </header>
       <main>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/add" element={<AddPage />} />
           <Route path="/archive" element={<ArchivedPage />} />
           <Route path="/notes/:id" element={<DetailPage />} />
