@@ -3,14 +3,20 @@ import PropTypes from "prop-types";
 
 function NoteSearch({ keyword, keywordChange }) {
   return (
-    <section className="search-bar">
-      <input
-        type="text"
-        placeholder="Cari catatan ..."
-        value={keyword}
-        onChange={(e) => keywordChange(e.target.value)}
-      />
-    </section>
+    <LocaleConsumer>
+      {({ locale }) => (
+        <section className="search-bar">
+          <input
+            type="text"
+            placeholder={
+              locale == "id" ? "Cari catatan ..." : "Search for notes"
+            }
+            value={keyword}
+            onChange={(e) => keywordChange(e.target.value)}
+          />
+        </section>
+      )}
+    </LocaleConsumer>
   );
 }
 

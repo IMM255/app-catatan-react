@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { LocaleConsumer } from "../contexts/LocaleContext";
 
 function RegisterInput({ register }) {
   const [name, setName] = useState("");
@@ -27,30 +28,34 @@ function RegisterInput({ register }) {
     });
   };
   return (
-    <form onSubmit={onSubmitHandler} className="input-register">
-      <label htmlFor=""></label>
-      <input
-        type="text"
-        placeholder="Nama"
-        className=""
-        value={name}
-        onChange={onNameChange}
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={onEmailChange}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        autoComplete="current-password"
-        value={password}
-        onChange={onPasswordChange}
-      />
-      <button>Register</button>
-    </form>
+    <LocaleConsumer>
+      {({ locale }) => (
+        <form onSubmit={onSubmitHandler} className="input-register">
+          <label htmlFor=""></label>
+          <input
+            type="text"
+            placeholder="Nama"
+            className=""
+            value={name}
+            onChange={onNameChange}
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={onEmailChange}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            autoComplete="current-password"
+            value={password}
+            onChange={onPasswordChange}
+          />
+          <button>{locale === "id" ? "Daftar" : "Register"}</button>
+        </form>
+      )}
+    </LocaleConsumer>
   );
 }
 

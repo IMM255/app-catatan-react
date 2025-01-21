@@ -7,6 +7,7 @@ import {
   deleteNote,
   unarchiveNote,
 } from "../utils/local-data";
+import { LocaleConsumer } from "../contexts/LocaleContext";
 
 function DetailPage() {
   const navigate = useNavigate();
@@ -28,7 +29,13 @@ function DetailPage() {
     navigate("/");
   };
   if (!note) {
-    return <div>Not found</div>;
+    return (
+      <LocaleConsumer>
+        {({ locale }) => (
+          <div>{locale == "id" ? "Tidak ditemukan" : "Not found"}</div>
+        )}
+      </LocaleConsumer>
+    );
   }
   return (
     <>
