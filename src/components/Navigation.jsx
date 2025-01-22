@@ -11,10 +11,6 @@ function Navigation({ logout, name }) {
       {({ locale, toggleLocale }) => {
         return (
           <>
-            <button onClick={toggleLocale} className="toggle-locale">
-              {locale === "id" ? "en" : "id"}
-            </button>
-            <ToggleTheme />
             {logout && name ? (
               <>
                 <nav className="navigation">
@@ -24,11 +20,17 @@ function Navigation({ logout, name }) {
                     </li>
                   </ul>
                 </nav>
-                <button onClick={logout} className="button-logout">
-                  {name}
-                  <FiLogOut />
-                </button>
               </>
+            ) : null}
+            <button onClick={toggleLocale} className="toggle-locale">
+              {locale === "id" ? "en" : "id"}
+            </button>
+            <ToggleTheme />
+            {logout && name ? (
+              <button onClick={logout} className="button-logout">
+                {name}
+                <FiLogOut />
+              </button>
             ) : null}
           </>
         );

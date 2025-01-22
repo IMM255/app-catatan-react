@@ -1,33 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import NoteDetail from "../components/NoteDetail";
-import {
-  getNote,
-  archiveNote,
-  deleteNote,
-  unarchiveNote,
-} from "../utils/local-data";
+import { getNote, archiveNote, deleteNote, unarchiveNote } from "../utils/api";
 import { LocaleConsumer } from "../contexts/LocaleContext";
+import { InfinitySpin } from "react-loader-spinner";
 
 function DetailPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [note, setNote] = useState(getNote(id));
+  const [loader, setLoader] = useState(true);
 
-  const onDeleteNoteHandler = (id) => {
-    deleteNote(id);
-    navigate("/");
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await getNote(id);
+        setNote(data);
+        setLoader(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const onArchiveHandler = (id) => {
-    archiveNote(id);
+  async function onDeleteNoteHandler(id) {
+    await deleteNote(id);
     navigate("/");
-  };
+  }
 
-  const onUnArchiveHandler = (id) => {
-    unarchiveNote(id);
+  async function onArchiveHandler(id) {
+    await archiveNote(id);
     navigate("/");
-  };
+  }
+
+  async function onUnArchiveHandler(id) {
+    await unarchiveNote(id);
+    navigate("/");
+  }
   if (!note) {
     return (
       <LocaleConsumer>
@@ -39,13 +49,24 @@ function DetailPage() {
   }
   return (
     <>
-      <NoteDetail
-        onDelete={() => onDeleteNoteHandler(id)}
-        onArchive={() =>
-          note.archived ? onUnArchiveHandler(id) : onArchiveHandler(id)
-        }
-        {...note}
-      />
+      {loader ? (
+        <div className="loader">
+          <InfinitySpin
+            visible={true}
+            width="200"
+            color="#3FC1C9"
+            ariaLabel="infinity-spin-loading"
+          />
+        </div>
+      ) : (
+        <NoteDetail
+          onDelete={() => onDeleteNoteHandler(id)}
+          onArchive={() =>
+            note.archived ? onUnArchiveHandler(id) : onArchiveHandler(id)
+          }
+          {...note}
+        />
+      )}
     </>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { login } from "../utils/api";
 import { LocaleConsumer } from "../contexts/LocaleContext";
 
 function LoginInput({ login }) {

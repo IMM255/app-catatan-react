@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { LocaleConsumer } from "../contexts/LocaleContext";
 
 function NoteSearch({ keyword, keywordChange }) {
   return (

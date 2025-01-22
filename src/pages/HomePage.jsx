@@ -1,19 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NoteAppBody from "../components/NoteAppBody";
-import { getActiveNotes, searchNotes } from "../utils/local-data";
+import { getActiveNotes } from "../utils/api";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import NoteSearch from "../components/NoteSearch";
 import { FaPlus } from "react-icons/fa";
 import { LocaleConsumer } from "../contexts/LocaleContext";
+import { InfinitySpin } from "react-loader-spinner";
 
 function HomePage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const keyword = searchParams.get("keyword") || "";
+  const [notes, setNotes] = useState([]);
+  const [loader, setLoader] = useState(true);
+  const [keyword, setKeyword] = useState(searchParams.get("keyword") || "");
 
-  const onKeywordChangeHandler = (keyword) => {
-    setSearchParams({ keyword });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await getActiveNotes();
+        setNotes(data);
+        setLoader(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const onKeywordChangeHandler = (newKeyword) => {
+    setSearchParams({ keyword: newKeyword });
+    setKeyword(newKeyword);
   };
+
+  const filteredNotes = notes.filter((note) =>
+    note.title.toLowerCase().includes(keyword.toLowerCase())
+  );
 
   const detail = () => {
     navigate("/add");
@@ -29,10 +50,18 @@ function HomePage() {
               keywordChange={onKeywordChangeHandler}
               keyword={keyword}
             />
-            <NoteAppBody
-              keyword={keyword}
-              notes={keyword != "" ? searchNotes(keyword) : getActiveNotes()}
-            />
+            {loader ? (
+              <div className="loader">
+                <InfinitySpin
+                  visible={true}
+                  width="200"
+                  color="#3FC1C9"
+                  ariaLabel="infinity-spin-loading"
+                />
+              </div>
+            ) : (
+              <NoteAppBody keyword={keyword} notes={filteredNotes} />
+            )}
           </section>
           <div className="homepage__action">
             <button

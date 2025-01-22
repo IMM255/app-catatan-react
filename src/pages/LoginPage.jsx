@@ -4,13 +4,16 @@ import LoginInput from "../components/LoginInput";
 import { login } from "../utils/api";
 import { Link } from "react-router-dom";
 import { LocaleConsumer } from "../contexts/LocaleContext";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage({ loginSuccess }) {
+  const navigate = useNavigate();
   async function onLogin({ email, password }) {
     const { error, data } = await login({ email, password });
 
     if (!error) {
       loginSuccess(data);
+      navigate("/");
     }
   }
 

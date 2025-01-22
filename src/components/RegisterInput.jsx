@@ -6,6 +6,7 @@ function RegisterInput({ register }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const onNameChange = (event) => {
     setName(event.target.value);
@@ -19,8 +20,16 @@ function RegisterInput({ register }) {
     setPassword(event.target.value);
   };
 
+  const onConfirmPassword = (event) => {
+    setConfirmPassword(event.target.value);
+  };
+
   const onSubmitHandler = (event) => {
     event.preventDefault();
+    if (password != confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
     register({
       name,
       email,
@@ -34,7 +43,7 @@ function RegisterInput({ register }) {
           <label htmlFor=""></label>
           <input
             type="text"
-            placeholder="Nama"
+            placeholder={locale == "id" ? "Nama" : "Name"}
             className=""
             value={name}
             onChange={onNameChange}
@@ -47,10 +56,19 @@ function RegisterInput({ register }) {
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder={locale == "id" ? "Kata Sandi" : "Password"}
             autoComplete="current-password"
             value={password}
             onChange={onPasswordChange}
+          />
+          <input
+            type="password"
+            placeholder={
+              locale == "id" ? "Konfirmasi kata sandi" : "Confirm Password"
+            }
+            autoComplete="current-password"
+            value={confirmPassword}
+            onChange={onConfirmPassword}
           />
           <button>{locale === "id" ? "Daftar" : "Register"}</button>
         </form>
