@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { LocaleConsumer } from "../contexts/LocaleContext";
+import useInput from "./UseInput";
 
 function LoginInput({ login }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const onEmailChangeHandler = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const onPasswordChangeHandler = (event) => {
-    setPassword(event.target.value);
-  };
+  const [email, onEmailChangeHandler] = useInput("");
+  const [password, onPasswordChangeHandler] = useInput("");
 
   const onSubmitHandler = (event) => {
     event.preventDefault();

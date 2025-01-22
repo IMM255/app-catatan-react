@@ -3,10 +3,11 @@ import PropTypes from "prop-types";
 import { MdDone } from "react-icons/md";
 import { useState } from "react";
 import { LocaleConsumer } from "../contexts/LocaleContext";
+import useInput from "./UseInput";
 
 function NoteInput({ onSubmit }) {
-  const [title, setTitle] = React.useState("");
-  const [body, setBody] = React.useState("");
+  const [title, setTitle] = useState("");
+  const [body, onBodyChangeEventHandler] = useInput("");
   const [titleCharLimit, setTitleCharLimit] = useState(50);
 
   const onTitleChangeEventHandler = (event) => {
@@ -15,10 +16,6 @@ function NoteInput({ onSubmit }) {
     if (inputValue.length <= maxLimit) {
       setTitle(inputValue);
     }
-  };
-
-  const onBodyChangeEventHandler = (event) => {
-    setBody(event.target.value);
   };
 
   return (
